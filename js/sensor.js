@@ -32,8 +32,8 @@ Sensor.prototype.update = function(dt, game) {
   var len = game.objects.length;
   var sensorPoint = this.sensorPoint();
 
-  while (len--) {
-    var object = game.objects[len];
+  for(var i = 0; i < len; i++) {
+    var object = game.objects[i];
     if (!(object instanceof Food)) {
       continue;
     }
@@ -59,6 +59,7 @@ Sensor.prototype.draw = function(engine) {
   var y1 = this.y;
   var x2 = this.sensorPoint().x;
   var y2 = this.sensorPoint().y;
+  var shouldDraw = true;
 
   //engine.circle({
   //  color: { r: 0, g: 0, b:0 },
@@ -67,7 +68,9 @@ Sensor.prototype.draw = function(engine) {
   //  radius: this.radius
   //});
 
-  engine.ctx.strokeStyle = engine.rgb(this);
-  engine.simpleLine(x1, y1, x2, y2);
-  engine.ctx.strokeStyle = engine.rgb({color: { r: 0, g: 0, b: 0}});
+  if (shouldDraw) {
+    engine.ctx.strokeStyle = engine.rgb(this);
+    engine.simpleLine(x1, y1, x2, y2);
+    engine.ctx.strokeStyle = engine.rgb({color: { r: 0, g: 0, b: 0}});
+  }
 };

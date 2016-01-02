@@ -3,21 +3,20 @@ function Food(options) {
   this.y = options.y;
   this.radius = 2;
   this.color = { r: 241, g: 196, b: 15 };
-  this.life = 100;
+  this.eaten = false;
 }
 
 Food.prototype.reject = function() {
-  return this.life <= 0;
+  return this.eaten;
 };
 
 Food.prototype.eat = function() {
-  this.life = -1;
+  this.eaten = true;
   this.x = -1;
   this.y = -1;
 };
 
 Food.prototype.update = function(dt, game) {
-  //this.life -= dt * 10;
 };
 
 Food.prototype.draw = function(engine) {
