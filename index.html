@@ -49,8 +49,8 @@ var baseBrain = Network.fromJSON(JSON.parse(brain));
 var game = new Game({
   width: 500,
   height: 500,
-  id: "game",
-  baseBrain: baseBrain
+  id: "game"/*,
+  baseBrain: baseBrain*/
 });
 
 var ctx = $('#myChart').get(0).getContext('2d');
