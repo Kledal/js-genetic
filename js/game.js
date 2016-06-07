@@ -4,7 +4,7 @@ function Game(options) {
   this.canvasId = options.id;
 
   this.population = new Population(this, {
-    mutationRate: 0.1,
+    mutationRate: 0.3,
     new: this.newCreature,
     baseBrain: options.baseBrain || null
   });
@@ -14,6 +14,8 @@ function Game(options) {
 
   this.lastUpdate = Date.now();
   this.objects = [];
+  this.fastmode = true;
+  this.iterationNumber = 0;
   this.initLoop();
 }
 
@@ -36,12 +38,30 @@ Game.prototype.collisionDetect = function(x, y, r, x1, y1, r1) {
 Game.prototype.initLoop = function() {
   var _this = this;
 
+  var gameLogicLoop = function() {
+    var iterations = _this.fastmode ? 40 : 1;
+    for(var i = 0;i < iterations; i++) {
+      _this.tickSimulation();
+    }
+  };
+
+  setInterval(gameLogicLoop, 0);
+
   var setupDraw = function() {
-    _this.update();
     _this.draw();
     window.requestAnimationFrame(setupDraw);
   };
   window.requestAnimationFrame(setupDraw);
+};
+
+Game.prototype.tickSimulation = function() {
+  this.update();
+  this.iterationNumber++;
+
+  if (this.iterationNumber >= 600) {
+    chart.addData([this.population.totalFitness()], this.population.generation);
+    this.newPopulation();
+  }
 };
 
 Game.prototype.draw = function() {
@@ -56,11 +76,11 @@ Game.prototype.draw = function() {
 };
 
 Game.prototype.update = function() {
-  var now = Date.now();
-  var dt = now - this.lastUpdate;
-  this.lastUpdate = now;
+  //var now = Date.now();
+  //var dt = now - this.lastUpdate;
+  //this.lastUpdate = now;
 
-  var gameDt = dt / 5;
+  var gameDt = 1;//dt / 5;
 
   var len = this.objects.length;
   for(var i = 0; i < len; i++) {
@@ -102,6 +122,7 @@ Game.prototype.pushFood = function() {
 };
 
 Game.prototype.newPopulation = function() {
+  this.iterationNumber = 0;
   this.bestLastCandidate = this.population.sortByFitness()[0];
   this.population.newPopulation();
 };
@@ -113,7 +134,7 @@ Game.prototype.replacePopulation = function(creatures) {
 Game.prototype.initialGeneration = function(amount) {
   var foodCount = _.filter(this.objects, function(obj) { return obj instanceof Food }).length;
   for(var i = foodCount; i < 200; i++) {
-    this.objects.push(this.newFood());
+    this.pushFood();
   }
 
   return this.population.initialGeneration(amount);

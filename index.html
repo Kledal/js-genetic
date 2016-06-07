@@ -68,10 +68,6 @@ var chart = new Chart(ctx).Line({
 }, options);
 
 game.replacePopulation(game.initialGeneration(30));
-setInterval(function() {
-  chart.addData([game.population.totalFitness()], game.population.generation);
-  game.newPopulation();
-}, 2500);
 
 function clamp(value, maximum, minimum){
   if (value > maximum) return maximum;

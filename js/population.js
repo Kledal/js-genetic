@@ -42,7 +42,7 @@ Population.prototype = {
   },
 
   resetPopulation: function() {
-    this.chromosomes = [];
+    this.chromosomes.length = 0;
   },
 
   replacePopulation: function(chromosomes) {
@@ -70,9 +70,9 @@ Population.prototype = {
     var len = chromosomes.length/8;
     for(var i = 0; i < len; i++) {
       var offset = -2 * (i+1);
-      var breed = this.crossover(chromosomes[0], chromosomes[1], 0);
-      this.mutate(breed[0].brain, 0.1, 0.3);
-      this.mutate(breed[1].brain, 0.1, 0.3);
+      var breed = this.crossover(chromosomes[0], chromosomes[1]);
+      this.mutate(breed[0].brain);
+      this.mutate(breed[1].brain);
       chromosomes.splice(chromosomes.length + offset, 2, breed[0], breed[1]);
     }
 
