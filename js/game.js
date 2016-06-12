@@ -118,6 +118,9 @@ Game.prototype.newFood = function() {
 };
 
 Game.prototype.pushFood = function() {
+  var foodCount = _.filter(this.objects, function(obj) { return obj instanceof Food }).length;
+  if (foodCount > 200) return;
+
   this.objects[this.objects.length] = this.newFood();
 };
 
